@@ -6,7 +6,7 @@ from dateutil import parser
 import json
 import urllib.request
 import sched, time
-
+import datetime
 
 # query Bamboo to see if a new build has been pushed
 # if so, activate the dome light
@@ -17,7 +17,7 @@ def check_for_new_builds():
         lastBuildTime = currentBuildTime
         print("New build detected at: ", currentBuildTime, "Activating dome light!")
         # TODO: activate dome light lol
-    s.enter(5, 1, check_for_new_builds)
+    s.enter(5, 1, check_for_new_builds, {})
 
 
 # retrieves the latest build time from Bamboo
@@ -35,11 +35,11 @@ def get_latest_build_time():
 # get a baseline build time; any builds after this time will trigger the light
 lastBuildTime = get_latest_build_time()
 
-print("BambooAlert started at", time.time(), "last detected CI push", lastBuildTime)
+print("BambooAlert started at", datetime.datetime.now(), "last detected CI push", lastBuildTime)
 
 # check for new builds every five seconds
 s = sched.scheduler(time.time, time.sleep)
-s.enter(5, 1, check_for_new_builds)
+s.enter(5, 1, check_for_new_builds, {})
 s.run()
 
 
