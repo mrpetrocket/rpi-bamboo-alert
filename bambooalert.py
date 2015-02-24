@@ -9,6 +9,8 @@ import sched, time
 import datetime
 from subprocess import call
 
+domeLightEvent = None
+
 # turns on dome light
 # using a robogaia 4-relay board. dome light is hooked to relay 1.
 # http://www.robogaia.com/how-to-add-a-web-interface-to-the-raspberry-pi-4-relay-board.html
