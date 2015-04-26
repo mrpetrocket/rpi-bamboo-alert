@@ -32,7 +32,7 @@ def dome_light_on():
     if relayDriverPresent:
         call(["relay_on", " 1"])
     else:
-        logger.debug("Dome light ON, but relay driver missing")
+        logger.warning("Dome light ON, but relay driver missing")
 
 
 # turns off dome light
@@ -41,14 +41,15 @@ def dome_light_off():
     if relayDriverPresent:
         call(["relay_off", " 1"])
     else:
-        logger.debug("Dome light OFF, but relay driver missing")
+        logger.warning("Dome light OFF, but relay driver missing")
 
 # query Bamboo to see if a new build has been pushed
 # if so, activate the dome light
 def check_for_new_builds():
     global checkFrequency, domeLightEvent, logger, mailChecker, s
     if mailChecker.check():
-        logger.info("New build detected at: ", datetime.datetime.now(), "Activating dome light!")
+
+        logger.info("New build detected. Activating dome light!")
         dome_light_on()
         # turn dome light off after 5s
         try:
@@ -69,8 +70,8 @@ def init():
         logger.error(e)
         return False
 
+    relayDriverPresent = True #TODO: get this to work with py3.3: (shutil.which("relay_on") != None)
     dome_light_off()
-    relayDriverPresent = os.path.isfile("relay_on")
     return True
 
 # main routine starts here
